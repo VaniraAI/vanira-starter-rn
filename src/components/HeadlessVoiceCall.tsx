@@ -7,7 +7,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import {useVaniraCall} from '@vanira/sdk-react-native/headless';
+import {useVaniraCall} from '@vanira/react-native-sdk/headless';
 
 const ORB_SIZE = 152;
 const FIELD_SIZE = 240;

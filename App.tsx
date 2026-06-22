@@ -3,7 +3,7 @@ import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {
   PresetHostProvider,
   VaniraCallProvider,
-} from '@vanira/sdk-react-native/headless';
+} from '@vanira/react-native-sdk/headless';
 import {
   VANIRA_AGENT_ID,
   VANIRA_API_KEY,

@@ -2,13 +2,9 @@ const path = require('path');
 const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
 
 const projectRoot = __dirname;
-const sdkRoot = path.resolve(
-  projectRoot,
-  '../vanira-dashboard/react-native-mobile/vanira-sdk-rn',
-);
 const appModules = path.resolve(projectRoot, 'node_modules');
 
-/** Peer deps — must resolve from the app, not the SDK's dev node_modules. */
+/** Peer deps — resolve native modules from the app, not nested copies. */
 const sharedModules = {
   react: path.join(appModules, 'react'),
   'react-native': path.join(appModules, 'react-native'),
@@ -29,27 +25,11 @@ const sharedModules = {
   ),
 };
 
-/** Bundle @vanira/sdk-react-native from local source (pre-npm publish). */
 const config = {
-  watchFolders: [sdkRoot],
   resolver: {
     unstable_enablePackageExports: true,
-    // Only the app's node_modules — SDK node_modules has its own React (vitest).
-    nodeModulesPaths: [appModules],
     extraNodeModules: sharedModules,
     resolveRequest: (context, moduleName, platform) => {
-      if (moduleName === '@vanira/sdk-react-native') {
-        return {
-          filePath: path.join(sdkRoot, 'src/index.ts'),
-          type: 'sourceFile',
-        };
-      }
-      if (moduleName === '@vanira/sdk-react-native/headless') {
-        return {
-          filePath: path.join(sdkRoot, 'src/headless/index.ts'),
-          type: 'sourceFile',
-        };
-      }
       if (sharedModules[moduleName]) {
         return {
           filePath: require.resolve(moduleName, {paths: [projectRoot]}),

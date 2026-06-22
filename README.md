@@ -1,6 +1,6 @@
 # vanira-starter-rn
 
-Minimal **React Native** app with [`@vanira/sdk-react-native`](https://www.npmjs.com/package/@vanira/sdk-react-native) — **`VaniraCallBox`** for voice + preset modals (camera, upload, forms) and session continue/resume.
+Minimal **React Native** app with [`@vanira/react-native-sdk`](https://www.npmjs.com/package/@vanira/react-native-sdk) — **`VaniraCallBox`** for voice + preset modals (camera, upload, forms) and session continue/resume.
 
 ## Prerequisites
 
@@ -38,44 +38,43 @@ Android:
 npm run android
 ```
 
-## Local SDK (before npm publish)
+## SDK dependency
 
-The starter uses the SDK from the Vanira monorepo:
+The starter installs the published SDK from npm:
 
 ```json
-"@vanira/sdk-react-native": "file:../vanira-dashboard/react-native-mobile/vanira-sdk-rn"
+"@vanira/react-native-sdk": "^0.1.3"
 ```
 
-`metro.config.js` bundles SDK TypeScript from that path. Clone layout:
-
-```
-Documents/
-  vanira-starter-rn/
-  vanira-dashboard/react-native-mobile/vanira-sdk-rn/
-```
-
-After SDK changes or first install, restart Metro with a clean cache:
+`metro.config.js` pins peer native modules to the app’s `node_modules`. After upgrading the SDK, restart Metro with a clean cache:
 
 ```bash
 npm start -- --reset-cache
 ```
-
-When `@vanira/sdk-react-native@0.0.4+` is on npm, switch the dependency to `"^0.0.4"` and simplify `metro.config.js`.
 
 ## What's included
 
 | File | Purpose |
 |------|---------|
 | `index.js` | `registerGlobals()` from `react-native-webrtc` (required) |
-| `App.tsx` | `VaniraCallBox` — voice pill + preset host |
-| `metro.config.js` | Resolves local `@vanira/sdk-react-native` from source |
-| `src/screens/HomeScreen.tsx` | Simple hero screen |
+| `App.tsx` | Headless voice UI (`VaniraCallProvider` + custom orb) |
+| `examples/vanira-call-box/App.tsx` | **`VaniraCallBox`** — drop-in voice pill + preset modals |
+| `metro.config.js` | Resolves SDK peer deps from the app |
+| `src/screens/HomeScreen.tsx` | Headless demo screen |
 | `src/config/vanira.ts` | Agent ID + API key (from `.env`) |
 | `src/config/runtime.ts` | RN runtime + AsyncStorage session persistence |
 
-`VaniraCallBox` wraps `PresetHostProvider` and handles call lifecycle, mute, and preset routing. Use `renderCallUI` for a custom pill, or `@vanira/sdk-react-native/headless` for full control.
+Default app is **headless**. To run the **VaniraCallBox** example, swap the import in `index.js`:
+
+```js
+import App from './examples/vanira-call-box/App';
+```
+
+`VaniraCallBox` wraps `PresetHostProvider` and handles call lifecycle, mute, and preset routing. Use `renderCallUI` for a custom pill, or `@vanira/react-native-sdk/headless` for full control.
 
 ## Custom UI
+
+See `examples/vanira-call-box/App.tsx` for the full example. Minimal usage:
 
 ```tsx
 <VaniraCallBox
@@ -94,7 +93,7 @@ import {
   PresetHostProvider,
   VaniraCallProvider,
   useVaniraCall,
-} from '@vanira/sdk-react-native/headless';
+} from '@vanira/react-native-sdk/headless';
 ```
 
 See [RN SDK docs](https://vanira.io/docs#rn-sdk-headless).

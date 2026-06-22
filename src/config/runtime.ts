@@ -1,9 +1,9 @@
-import {reactNativeRuntime} from '@vanira/sdk-react-native';
+import {reactNativeRuntime} from '@vanira/react-native-sdk';
 import {persistentCallStorage} from '../storage/callSessionStorage';
 
 if (!reactNativeRuntime) {
   throw new Error(
-    '[runtime] reactNativeRuntime failed to load from @vanira/sdk-react-native',
+    '[runtime] reactNativeRuntime failed to load from @vanira/react-native-sdk',
   );
 }
 
